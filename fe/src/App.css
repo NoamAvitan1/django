@@ -1,0 +1,59 @@
+html {
+    --tale-animation-time: 1000ms
+  }
+  
+  .flipper {
+      perspective: 500px;
+      backface-visibility: hidden;
+  }
+  
+  .rotate-y-full {
+      transform: rotateX(180deg);
+      transition-duration: 300;
+      transform-style: preserve-3d;
+  }
+  
+  .modal-grow {
+      animation: grow 300ms forwards;
+  }
+  
+  .modal-shrink {
+      animation: shrink 300ms forwards;
+  }
+  
+  .modal-container-vanish {
+    animation: bg-vanish 300ms forwards;
+  }
+  
+  @keyframes grow {
+      0% { 
+        transform: scale(0); 
+        opacity: 0; 
+      } 
+      85% { 
+        transform: scale(1.05); 
+        opacity: 1; 
+      } 
+      100% { 
+        transform: scale(1); 
+        opacity: 1; 
+      } 
+    }
+  
+  @keyframes shrink {
+      0% { 
+          transform: scale(1); 
+          opacity: 1;
+      } 
+      100% {  
+        transform: scale(0);
+        opacity: 0;} 
+    }
+
+  
+  @keyframes bg-vanish {
+    to {
+      background-color: transparent;
+    }
+  }
+  
