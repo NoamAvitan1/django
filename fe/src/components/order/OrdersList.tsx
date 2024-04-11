@@ -4,12 +4,18 @@ import { MdOutlineDelete } from "react-icons/md";
 import { MdOutlineEdit } from "react-icons/md";
 import { useState } from "react";
 import { EditOrder } from "./EditOrder";
+import { orderType } from "../../../types/Order";
 
 type Props = {};
 
 export const OrdersList = (props: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [order, setOrder] = useAtom(orderAtom);
+  const [choosedOrder, setChoosedOrder] = useState<orderType>();
+  const getData = (o: orderType) => {
+    setChoosedOrder(o);
+    setIsOpen(true);
+  };
   const deleteOrder = async (_id: number) => {
     const res = await fetch(`http://127.0.0.1:8000/orders/${_id}/`, {
       method: "DELETE",
@@ -51,19 +57,19 @@ export const OrdersList = (props: Props) => {
                 <button onClick={() => deleteOrder(o.id)}>
                   <MdOutlineDelete className="text-red-500" />
                 </button>
-                <button onClick={() => setIsOpen(true)}>
+                <button onClick={() => getData(o)}>
                   <MdOutlineEdit />
                 </button>
-                <EditOrder
-                  orderItem={o}
-                  isOpen={isOpen}
-                  setIsOpen={setIsOpen}
-                />
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <EditOrder
+        orderItem={choosedOrder}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+      />
     </div>
   );
 };

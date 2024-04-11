@@ -11,9 +11,10 @@ import { IoMdClose } from "react-icons/io";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { MdOutlineEdit } from "react-icons/md";
+import { orderAtom } from "../../jotai/Order";
 
 type Props = {
-  orderItem: orderType;
+  orderItem?: orderType;
   isOpen: boolean;
   setIsOpen: Function;
 };
@@ -21,9 +22,10 @@ type Props = {
 export const EditOrder = ({ orderItem, isOpen, setIsOpen }: Props) => {
   const [customer, setCustomer] = useAtom(customerAtom);
   const [product, setProduct] = useAtom(productAtom);
-  const [selectedProducts, setSelectedProducts] = useState<string[]>(
-    orderItem.products.map((product) => product.name)
-  );
+  const [order,setOrder] = useAtom(orderAtom)
+  const [selectedProducts, setSelectedProducts] = useState<
+    string[] | undefined
+  >(orderItem?.products?.map((product) => product.name));
   const [validationError, setValidationError] =
     useState<yup.ValidationError | null>(null);
   const authSchema = () => {
@@ -45,7 +47,7 @@ export const EditOrder = ({ orderItem, isOpen, setIsOpen }: Props) => {
         .validate(forValidation)
         .then(async () => {
           const res = await fetch(
-            `http://127.0.0.1:8000/orders/${orderItem.id}/`,
+            `http://127.0.0.1:8000/orders/${orderItem?.id}/`,
             {
               method: "PUT",
               body: JSON.stringify({
@@ -57,6 +59,7 @@ export const EditOrder = ({ orderItem, isOpen, setIsOpen }: Props) => {
               },
             }
           );
+
           if (!res.ok) {
             let dataError = await res.json();
             setValidationError(dataError);
@@ -81,12 +84,13 @@ export const EditOrder = ({ orderItem, isOpen, setIsOpen }: Props) => {
 
   const handleProductSelect = (e: string) => {
     const selectedProductName = e;
-    if (selectedProducts.includes(selectedProductName)) {
+    if (selectedProducts?.includes(selectedProductName)) {
       setSelectedProducts(
         selectedProducts.filter((p) => p !== selectedProductName)
       );
     } else {
-      setSelectedProducts([...selectedProducts, selectedProductName]);
+      if (selectedProducts)
+        setSelectedProducts([...selectedProducts, selectedProductName]);
     }
   };
 
@@ -105,7 +109,7 @@ export const EditOrder = ({ orderItem, isOpen, setIsOpen }: Props) => {
               </label>
               <section className="mb-6">
                 <input
-                  defaultValue={orderItem.order_number}
+                  defaultValue={orderItem?.order_number}
                   className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-md outline-none focus:border-blue-600 w-full p-3"
                   name="order_number"
                   placeholder="202"
@@ -119,7 +123,7 @@ export const EditOrder = ({ orderItem, isOpen, setIsOpen }: Props) => {
               </label>
               <section className="mb-6">
                 <input
-                  defaultValue={orderItem.comments}
+                  defaultValue={orderItem?.comments}
                   className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-md outline-none focus:border-blue-600 w-full p-3"
                   name="comments"
                   required
@@ -161,7 +165,7 @@ export const EditOrder = ({ orderItem, isOpen, setIsOpen }: Props) => {
                 </select>
               </section>
               <div className="flex gap-2 mb-1">
-                {selectedProducts.map((productName, index) => (
+                {selectedProducts?.map((productName, index) => (
                   <button
                     onClick={() => handleProductSelect(productName)}
                     className="bg-green-300 p-2 rounded-md flex items-center gap-2 w-fit"
