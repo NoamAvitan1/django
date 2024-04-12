@@ -1,6 +1,6 @@
 import { orderType } from "../../../types/Order";
 import { Modal } from "../common/Modal";
-import { BaseSyntheticEvent, useState } from "react";
+import { BaseSyntheticEvent, useEffect, useState } from "react";
 import { object, string } from "yup";
 import * as yup from "yup";
 import { Message } from "../login/Message";
@@ -10,7 +10,6 @@ import { productAtom } from "../../jotai/Product";
 import { IoMdClose } from "react-icons/io";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { MdOutlineEdit } from "react-icons/md";
 import { orderAtom } from "../../jotai/Order";
 
 type Props = {
@@ -25,7 +24,7 @@ export const EditOrder = ({ orderItem, isOpen, setIsOpen }: Props) => {
   const [order,setOrder] = useAtom(orderAtom)
   const [selectedProducts, setSelectedProducts] = useState<
     string[] | undefined
-  >(orderItem?.products?.map((product) => product.name));
+  >([]);
   const [validationError, setValidationError] =
     useState<yup.ValidationError | null>(null);
   const authSchema = () => {
@@ -34,6 +33,11 @@ export const EditOrder = ({ orderItem, isOpen, setIsOpen }: Props) => {
       comments: string().min(1).required(),
     });
   };
+  useEffect(()=> {
+    setSelectedProducts(()=>{
+      return orderItem?.products?.map((product) => product.name)
+    })
+  },[orderItem])
   const handleSubmit = (e: BaseSyntheticEvent) => {
     e.preventDefault();
     try {
@@ -66,6 +70,14 @@ export const EditOrder = ({ orderItem, isOpen, setIsOpen }: Props) => {
             return;
           }
           const data = await res.json();
+          let newOrder = order;
+          if(newOrder)
+          for (let i = 0; i < newOrder?.length; i++){
+               if(newOrder[i].id === data.id){
+                newOrder[i] = data;
+               }
+          }
+          setOrder(newOrder);
           if (data?.error) {
             return;
           }
