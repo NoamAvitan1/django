@@ -77,6 +77,8 @@ export const OrderForm = ({ setIsOpen,getData }: Props) => {
     }
   };
 
+  console.log(selectedProducts);
+
   const notify = () => toast("Order added successfully!");
   return (
     <div className="w-[400px] h-[500px] bg-white flex justify-center ">

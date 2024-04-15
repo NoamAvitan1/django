@@ -1,15 +1,12 @@
 import { useAtom } from "jotai";
-import { productAtom } from "../../jotai/Product";
 import { customerAtom } from "../../jotai/CustomerAtom";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Modal } from "../common/Modal";
-import { customerType } from "../../../types/Customer";
 import { orderType } from "../../../types/Order";
 
 type Props = {};
 
-export const EditCustomer = (props: Props) => {
+export const CustomersList = (props: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [customer, setCustomer] = useAtom(customerAtom);
   const [currentCustomer, setCurrentCustomer] = useState<any>();
@@ -27,7 +24,7 @@ export const EditCustomer = (props: Props) => {
   };
   return (
     <div>
-      <h1 className="text-2xl">Customers</h1>
+      <h1 className="text-2xl ">Customers</h1>
       <table className="table-auto w-1/3">
         <thead>
           <tr>

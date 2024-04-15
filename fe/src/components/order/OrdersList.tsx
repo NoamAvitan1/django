@@ -12,7 +12,7 @@ export const OrdersList = (props: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [order, setOrder] = useAtom(orderAtom);
   const [choosedOrder, setChoosedOrder] = useState<orderType>();
-  const getData = (o: orderType) => {
+  const updateChoosedOrder = (o: orderType) => {
     setChoosedOrder(o);
     setIsOpen(true);
   };
@@ -57,7 +57,7 @@ export const OrdersList = (props: Props) => {
                 <button onClick={() => deleteOrder(o.id)}>
                   <MdOutlineDelete className="text-red-500" />
                 </button>
-                <button onClick={() => getData(o)}>
+                <button onClick={() => updateChoosedOrder(o)}>
                   <MdOutlineEdit />
                 </button>
               </td>

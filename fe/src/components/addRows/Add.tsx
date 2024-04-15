@@ -11,9 +11,13 @@ import { OrderForm } from "../order/OrderForm";
 import { ProductForm } from "../product/ProductForm";
 import { CustomerForm } from "../customer/CustomerForm";
 
-type Props = {};
+type Props = {
+  orderPagination:number;
+  productPagination:number;
+  customerPagination:number
+};
 
-export const Add = (props: Props) => {
+export const Add = ({orderPagination,productPagination,customerPagination}: Props) => {
   const [customer, setCustomer] = useAtom(customerAtom);
   const [product, setProduct] = useAtom(productAtom);
   const [order, setOrder] = useAtom(orderAtom);
@@ -21,9 +25,9 @@ export const Add = (props: Props) => {
   const [type, setType] = useState<"order" | "customer" | "product">();
   const getData = async () => {
     const [ordersRes, customersRes, productsRes] = await Promise.all([
-      fetch("http://127.0.0.1:8000/orders/"),
-      fetch("http://127.0.0.1:8000/customers/"),
-      fetch("http://127.0.0.1:8000/products/"),
+      fetch(`http://127.0.0.1:8000/orders/?page=1&page_size=${orderPagination}`),
+      fetch(`http://127.0.0.1:8000/customers/?page=1&page_size=${customerPagination}`),
+      fetch(`http://127.0.0.1:8000/products/?page=1&page_size=${productPagination}`),
     ]);
     const ordersData = await ordersRes.json();
     const customersData = await customersRes.json();
@@ -34,7 +38,7 @@ export const Add = (props: Props) => {
   };
   useEffect(() => {
     getData();
-  }, []);
+  }, [orderPagination,productPagination,customerPagination]);
 
   const notify = () => toast("Add customer and product first!");
   return (
