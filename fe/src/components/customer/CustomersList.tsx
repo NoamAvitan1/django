@@ -3,15 +3,18 @@ import { customerAtom } from "../../jotai/CustomerAtom";
 import { useState } from "react";
 import { Modal } from "../common/Modal";
 import { orderType } from "../../../types/Order";
-import { PiCursor } from "react-icons/pi";
 
+interface CurrentCustomerType{
+  total_sales:number;
+  orders:orderType[];
+}
 
 type Props = {};
 
 export const CustomersList = (props: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [customer, setCustomer] = useAtom(customerAtom);
-  const [currentCustomer, setCurrentCustomer] = useState<any>();
+  const [currentCustomer, setCurrentCustomer] = useState<CurrentCustomerType>();
   
   const func = async(id:number) => {
       const res = await fetch(`http://127.0.0.1:8000/total-sales/${id}/`,{
@@ -46,7 +49,7 @@ export const CustomersList = (props: Props) => {
               </td>
               <td className="border px-2 py-4">{c.email}</td>
               <td className="border px-2 py-4">{c.phone}</td>
-              <td onClick={() => func(c.id)} className="border cursor-pointer px-2 py-4 flex items-center gap-2">Click <PiCursor/></td>
+              <td onClick={() => func(c.id)} className="border cursor-pointer px-2 py-4 whitespace-nowrap">Click to view</td>
             </tr>
           ))}
         </tbody>
@@ -67,7 +70,7 @@ export const CustomersList = (props: Props) => {
         <tbody>
           {currentCustomer?.orders?.map((o:orderType) => (
             <tr key={o.id}>
-              <td className="border px-2 py-4">{o.date}</td>
+              <td className="border px-2 py-4 whitespace-nowrap">{o.date}</td>
               <td className="border px-2 py-4">{o.order_number}</td>
               <td className="border px-2 py-4">{o.customer.name}</td>
               <td className="border px-2 py-4">{o.comments}</td>

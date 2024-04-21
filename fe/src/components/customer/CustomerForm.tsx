@@ -110,7 +110,7 @@ export const CustomerForm = ({setIsOpen, getData} : Props) => {
               </div>
           <Message validationError={validationError} />
           <button className="mb-2 rounded bg-gray-200 px-4 py-2">
-              Add
+              Save
           </button>
         </form>
     </div>

@@ -128,7 +128,7 @@ export const EditProduct = ({ productItem, isOpen, setIsOpen }: Props) => {
             </section>
           </div>
           <Message validationError={validationError} />
-          <button className="mb-2 rounded bg-gray-200 px-4 py-2">Add</button>
+          <button className="mb-2 rounded bg-gray-200 px-4 py-2">Save</button>
         </form>
       </div>
     </Modal>
